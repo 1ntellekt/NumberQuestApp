@@ -18,11 +18,12 @@ import java.lang.RuntimeException
 
 class GameFragment : Fragment() {
 
+    private val viewModelFactory by lazy {
+        GameViewModelFactory(requireActivity().application,level)
+    }
+
     private val viewModel: GameViewModel by lazy {
-        ViewModelProvider(this,
-            ViewModelProvider.
-            AndroidViewModelFactory.
-            getInstance(requireActivity().application))[GameViewModel::class.java]
+        ViewModelProvider(this,viewModelFactory)[GameViewModel::class.java]
     }
 
     private val tvOptions by lazy {
@@ -59,7 +60,6 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
         setClickListenersToOptions()
-        viewModel.startGame(level)
     }
 
     private fun setClickListenersToOptions(){

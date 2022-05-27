@@ -44,8 +44,36 @@ class FinishFragment : Fragment() {
             btnRetry.setOnClickListener {
                 retryGame()
             }
+            if (gameResult.winner){
+                emojiResult.setImageResource(R.drawable.ic_smile)
+            } else {
+                emojiResult.setImageResource(R.drawable.ic_sad)
+            }
+            tvRequiredAnswers.text = String.format(
+                resources.getString(R.string.required_score),
+                gameResult.gameSettings.minCountOfRightAnswers
+            )
+            tvScoreAnswers.text = String.format(
+                resources.getString(R.string.score_answers),
+                gameResult.countOfRightAnswers
+            )
+            tvRequiredPercentage.text = String.format(
+                resources.getString(R.string.required_percentage),
+                gameResult.gameSettings.minPercentOfRightAnswers
+            )
+            tvScorePercentage.text = String.format(
+                resources.getString(R.string.required_percentage),
+                getPercent()
+            )
         }
     }
+
+    private fun getPercent():Int = with(gameResult){
+        if (countOfQuestions == 0) return 0
+        return (countOfRightAnswers/countOfQuestions.toDouble() * 100).toInt()
+    }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
