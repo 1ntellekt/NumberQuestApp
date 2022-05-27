@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.numberquestapp.R
 import com.example.numberquestapp.databinding.FragmentGameBinding
 import com.example.numberquestapp.domain.entity.GameResult
@@ -18,8 +20,10 @@ import java.lang.RuntimeException
 
 class GameFragment : Fragment() {
 
+    private val args by navArgs<GameFragmentArgs>()
+
     private val viewModelFactory by lazy {
-        GameViewModelFactory(requireActivity().application,level)
+        GameViewModelFactory(requireActivity().application,args.level)
     }
 
     private val viewModel: GameViewModel by lazy {
@@ -37,16 +41,9 @@ class GameFragment : Fragment() {
         }
     }
 
-    private lateinit var level: Level
-
     private var _binding: FragmentGameBinding? = null
     private val binding: FragmentGameBinding
         get() = _binding ?: throw RuntimeException("FragmentGameBinding = null")
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        parseArgs()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -112,10 +109,9 @@ class GameFragment : Fragment() {
     }
 
     private fun launchFinishFragment(gameResult: GameResult){
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.main_container,FinishFragment.newInstance(gameResult))
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(
+            GameFragmentDirections.actionGameFragmentToFinishFragment(gameResult)
+        )
     }
 
     override fun onDestroyView() {
@@ -123,13 +119,7 @@ class GameFragment : Fragment() {
         _binding = null
     }
 
-    private fun parseArgs(){
-        requireArguments().getParcelable<Level>(KEY_LEVEL)?.let {
-            level = it
-        }
-    }
-
-    companion object {
+/*    companion object {
         const val KEY_LEVEL = "level"
         const val NAME = "GameFragment"
 
@@ -140,6 +130,6 @@ class GameFragment : Fragment() {
                 }
             }
         }
-    }
+    }*/
 
 }
