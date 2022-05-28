@@ -81,9 +81,9 @@ class GameFragment : Fragment() {
             }
             viewModel.enoughCountOfRightAnswers.observe(viewLifecycleOwner){
                 if (it){
-                    tvAnswersProgress.setTextColor(Color.RED)
-                }else{
                     tvAnswersProgress.setTextColor(Color.GREEN)
+                }else{
+                    tvAnswersProgress.setTextColor(Color.RED)
                 }
             }
             viewModel.progressAnswers.observe(viewLifecycleOwner){
